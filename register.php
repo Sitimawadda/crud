@@ -1,96 +1,104 @@
 <?php
-session_start();
-require_once 'koneksi.php';
+include 'koneksi.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = htmlspecialchars($_POST['nama']);
+    $jurusan = htmlspecialchars($_POST['jurusan']);
+    $email = htmlspecialchars($_POST['email']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+    // Cek email sudah ada
+    $cek_email = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
+    if(mysqli_num_rows($cek_email) > 0) {
+        echo "<script>
+                alert('Email sudah terdaftar!');
+                window.location.href = 'register.php';
+              </script>";
+        exit();
+    }
+
+    $sql = "INSERT INTO users (nama, jurusan, email, password) 
+            VALUES ('$nama', '$jurusan', '$email', '$password')";
+
+    if (mysqli_query($koneksi, $sql)) {
+        echo "<script>
+                alert('Registrasi berhasil!');
+                window.location.href = 'login.php';
+              </script>";
+    } else {
+        echo "<script>
+                alert('Registrasi gagal!');
+                window.location.href = 'register.php';
+              </script>";
+    }
+}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Mahasiswa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Register User</title>
     <style>
-        .register-container {
-            max-width: 400px;
-            margin: 100px auto;
+        .container {
+            width: 400px;
+            margin: 50px auto;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-        .register-header {
-            text-align: center;
-            margin-bottom: 30px;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-submit {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
-<body class="bg-light">
+<body>
     <div class="container">
-        <div class="register-container bg-white">
-            <div class="register-header">
-                <h2>Register Mahasiswa</h2>
-                <p class="text-muted">Buat akun baru</p>
+        <h2 style="text-align: center;">Register User</h2>
+        <form action="" method="POST">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" required>
             </div>
-            
-            <form method="POST" action="">
-                <div class="mb-3">
-                    <label for="nama" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="nama" name="nama" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="confirm_password" class="form-label">Konfirmasi Password</label>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                </div>
-                
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary" name="register">Daftar</button>
-                </div>
-            </form>
-
-            <div class="login-link">
-                <p>Sudah punya akun? <a href="login.php" class="text-decoration-none">Login disini</a></p>
+            <div class="form-group">
+                <label>Jurusan</label>
+                <select name="jurusan" required>
+                    <option value="">Pilih Jurusan</option>
+                    <option value="Teknik Informatika">Teknik Informatika</option>
+                    <option value="Sistem Informasi">Sistem Informasi</option>
+                    <option value="Manajemen Informatika">Manajemen Informatika</option>
+                </select>
             </div>
-
-            <?php
-            if(isset($_POST['register'])) {
-                $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
-                $password = $_POST['password'];
-                $confirm_password = $_POST['confirm_password'];
-
-                if($password === $confirm_password) {
-                    $check_user = mysqli_query($koneksi, "SELECT * FROM user WHERE nama = '$nama'");
-                    
-                    if(mysqli_num_rows($check_user) == 0) {
-                        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                        $sql = "INSERT INTO user (nama, password, created_at) VALUES ('$nama', '$hashed_password', NOW())";
-                        
-                        if(mysqli_query($koneksi, $sql)) {
-                            header("Location: login.php");
-                            exit();
-                        } else {
-                            echo '<div class="alert alert-danger mt-3">Terjadi kesalahan saat mendaftar.</div>';
-                        }
-                    } else {
-                        echo '<div class="alert alert-danger mt-3">Username sudah terdaftar!</div>';
-                    }
-                } else {
-                    echo '<div class="alert alert-danger mt-3">Password tidak cocok!</div>';
-                }
-            }
-            ?>
-        </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-submit">Register</button>
+        </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
