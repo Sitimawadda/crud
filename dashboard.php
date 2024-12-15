@@ -1,9 +1,20 @@
 <?php
+include 'koneksi.php';
+
 session_start();
 if(!isset($_SESSION['login'])) {
     header("Location: login.php");
     exit;
 }
+
+$query_users = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM admin");
+$total_users = mysqli_fetch_assoc($query_users)['total'];
+
+$query_jurusan = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM jurusan");
+$total_jurusan = mysqli_fetch_assoc($query_jurusan)['total'];
+
+$query_mahasiswa = mysqli_query($koneksi, "SELECT COUNT(*) as total FROM datamahasiswa");
+$total_mahasiswa = mysqli_fetch_assoc($query_mahasiswa)['total'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,13 +71,13 @@ if(!isset($_SESSION['login'])) {
             </li>
             <li class="menu-header">Menu</li>
             <li>
-              <a href="#" class="nav-link"><i class="fas fa-users"></i> <span>Users</span></a>
+              <a href="#" class="nav-link"><i class="fas fa-users"></i> <span>Admin</span></a>
             </li>
             <li>
-            <a href="#" class="nav-link"><i class="fas fa-graduation-cap"></i> <span>jurusan</span></a>
+              <a href="datamahasiswa.php" class="nav-link"><i class="fas fa-users"></i> <span>Mahasiswa</span></a>
             </li>
             <li>
-              <a href="#" class="nav-link"><i class="fas fa-cog"></i> <span>Settings</span></a>
+            <a href="jurusan.php" class="nav-link"><i class="fas fa-graduation-cap"></i> <span>jurusan</span></a>
             </li>
             
           </ul>
@@ -88,33 +99,45 @@ if(!isset($_SESSION['login'])) {
                 </div>
                 <div class="card-wrap">
                   <div class="card-header">
-                    <h4>Total Users</h4>
+                    <h4>Total Admin</h4>
                   </div>
                   <div class="card-body">
-                    10
+                    <?php echo $total_users ?>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-  <div class="card card-statistic-1">
-    <div class="card-icon bg-success">
-      <i class="fas fa-graduation-cap"></i>
-    </div>
-    <div class="card-wrap">
-      <div class="card-header">
-        <h4>Total Jurusan</h4>
-      </div>
-      <div class="card-body">
-        5
-      </div>
-    </div>
-  </div>
-</div>
-
+              <div class="card card-statistic-1">
+                <div class="card-icon bg-success">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="card-wrap">
+                  <div class="card-header">
+                    <h4>Total Mahasiswa</h4>
+                  </div>
+                  <div class="card-body">
+                    <?php echo $total_mahasiswa ?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="card card-statistic-1">
+                <div class="card-icon bg-success">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="card-wrap">
+                  <div class="card-header">
+                    <h4>Total Jurusan</h4>
+                  </div>
+                  <div class="card-body">
+                    <?php echo $total_jurusan?>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-
-          
 
           <div class="row">
             <div class="col-12">
