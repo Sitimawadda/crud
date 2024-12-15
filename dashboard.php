@@ -63,8 +63,12 @@ if(!isset($_SESSION['login'])) {
               <a href="#" class="nav-link"><i class="fas fa-users"></i> <span>Users</span></a>
             </li>
             <li>
+            <a href="#" class="nav-link"><i class="fas fa-graduation-cap"></i> <span>jurusan</span></a>
+            </li>
+            <li>
               <a href="#" class="nav-link"><i class="fas fa-cog"></i> <span>Settings</span></a>
             </li>
+            
           </ul>
         </aside>
       </div>
@@ -92,7 +96,25 @@ if(!isset($_SESSION['login'])) {
                 </div>
               </div>
             </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+  <div class="card card-statistic-1">
+    <div class="card-icon bg-success">
+      <i class="fas fa-graduation-cap"></i>
+    </div>
+    <div class="card-wrap">
+      <div class="card-header">
+        <h4>Total Jurusan</h4>
+      </div>
+      <div class="card-body">
+        5
+      </div>
+    </div>
+  </div>
+</div>
+
           </div>
+
+          
 
           <div class="row">
             <div class="col-12">

@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               Don't have an account? <a href="register.php">Create One</a>
             </div>
             <div class="simple-footer">
-              Copyright &copy; Stisla 2023
+              Copyright &copy; unsulbar 2024
             </div>
           </div>
         </div>

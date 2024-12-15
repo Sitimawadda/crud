@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="card card-primary">
-              <div class="card-header"><h4>Register</h4></div>
+              <div class="card-header"><h4>Registrasi</h4></div>
 
               <div class="card-body">
                 <?php if(isset($alert)) echo $alert; ?>
@@ -92,8 +92,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <select name="jurusan" class="form-control selectric" required>
                       <option value="">Pilih Jurusan</option>
                       <option value="Teknik Informatika">Teknik Informatika</option>
-                      <option value="Sistem Informasi">Sistem Informasi</option>
-                      <option value="Manajemen Informatika">Manajemen Informatika</option>
+                      <option value="teknik sipil">teknik sipil</option>
+                      <option value="pwk">Pwk</option>
+                      <option value="sistem informasi">sistem informasi</option>
                     </select>
                   </div>
 
@@ -114,23 +115,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <div class="form-group">
                     <div class="custom-control custom-checkbox">
                       <input type="checkbox" name="agree" class="custom-control-input" id="agree" required>
-                      <label class="custom-control-label" for="agree">I agree with the terms and conditions</label>
+                      <label class="custom-control-label" for="agree">Saya setuju dengan syarat dan ketentuan</label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block">
-                      Register
+                      Registasi
                     </button>
                   </div>
                 </form>
               </div>
             </div>
             <div class="mt-5 text-muted text-center">
-              Already have an account? <a href="login.php">Login</a>
+            Sudah punya akun? <a href="login.php">Login</a>
             </div>
             <div class="simple-footer">
-              Copyright &copy; Stisla 2018
+              Copyright &copy; Kelompok 6
             </div>
           </div>
         </div>
