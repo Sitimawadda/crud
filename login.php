@@ -2,10 +2,10 @@
 include 'koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = htmlspecialchars($_POST['email']);
+    $nama = htmlspecialchars($_POST['nama']);
     $password = $_POST['password'];
 
-    $query = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
+    $query = mysqli_query($koneksi, "SELECT * FROM admin WHERE nama = '$nama'");
     
     if(mysqli_num_rows($query) === 1) {
         $row = mysqli_fetch_assoc($query);
@@ -13,9 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if(password_verify($password, $row['password'])) {
             session_start();
             $_SESSION['login'] = true;
-            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['id'] = $row['id'];
             $_SESSION['nama'] = $row['nama'];
-            $_SESSION['jurusan'] = $row['jurusan'];
             
             $alert = '<div class="alert alert-success alert-dismissible show fade">
                         <div class="alert-body">
@@ -42,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <button class="close" data-dismiss="alert">
                             <span>&times;</span>
                         </button>
-                        Email tidak ditemukan!
+                        Nama tidak ditemukan!
                     </div>
                 </div>';
     }
@@ -53,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Login &mdash; Stisla</title>
+  <title>Login Admin</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/modules/bootstrap/css/bootstrap.min.css">
@@ -78,16 +77,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="card card-primary">
-              <div class="card-header"><h4>Login</h4></div>
+              <div class="card-header"><h4>Login Admin</h4></div>
 
               <div class="card-body">
                 <?php if(isset($alert)) echo $alert; ?>
                 <form method="POST" action="" class="needs-validation" novalidate="">
                   <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
+                    <label for="nama">Nama</label>
+                    <input id="nama" type="text" class="form-control" name="nama" tabindex="1" required autofocus>
                     <div class="invalid-feedback">
-                      Please fill in your email
+                      Masukkan nama anda
                     </div>
                   </div>
 
@@ -97,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
                     <div class="invalid-feedback">
-                      Please fill in your password
+                      Masukkan password anda
                     </div>
                   </div>
 
@@ -111,10 +110,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </div>
             </div>
             <div class="mt-5 text-muted text-center">
-              Don't have an account? <a href="register.php">Create One</a>
+              Belum punya akun? <a href="register.php">Buat Akun</a>
             </div>
             <div class="simple-footer">
-              Copyright &copy; unsulbar 2024
+              Copyright &copy; Kelompok 6
             </div>
           </div>
         </div>
@@ -134,5 +133,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!-- Template JS File -->
   <script src="assets/js/scripts.js"></script>
   <script src="assets/js/custom.js"></script>
+
+  <script>
+    // Auto dismiss alerts after 3 seconds
+    window.setTimeout(function() {
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 3000);
+  </script>
 </body>
 </html>

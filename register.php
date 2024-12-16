@@ -3,44 +3,55 @@ include 'koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama = htmlspecialchars($_POST['nama']);
-    $jurusan = htmlspecialchars($_POST['jurusan']);
-    $email = htmlspecialchars($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = $_POST['password'];
+    $password2 = $_POST['password2'];
 
-    // Cek email sudah ada
-    $cek_email = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
-    if(mysqli_num_rows($cek_email) > 0) {
+    // Cek password match
+    if($password !== $password2) {
         $alert = '<div class="alert alert-danger alert-dismissible show fade">
                     <div class="alert-body">
                         <button class="close" data-dismiss="alert">
                             <span>&times;</span>
                         </button>
-                        Email sudah terdaftar!
+                        Password tidak sama!
                     </div>
                 </div>';
     } else {
-        $sql = "INSERT INTO users (nama, jurusan, email, password) 
-                VALUES ('$nama', '$jurusan', '$email', '$password')";
-
-        if (mysqli_query($koneksi, $sql)) {
-            $alert = '<div class="alert alert-success alert-dismissible show fade">
-                        <div class="alert-body">
-                            <button class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                            Registrasi berhasil.!
-                        </div>
-                    </div>';
-            header("refresh:2;url=login.php");
-        } else {
+        // Cek nama sudah ada
+        $cek_nama = mysqli_query($koneksi, "SELECT * FROM admin WHERE nama = '$nama'");
+        if(mysqli_num_rows($cek_nama) > 0) {
             $alert = '<div class="alert alert-danger alert-dismissible show fade">
                         <div class="alert-body">
                             <button class="close" data-dismiss="alert">
                                 <span>&times;</span>
                             </button>
-                            Registrasi gagal!
+                            Nama sudah terdaftar!
                         </div>
                     </div>';
+        } else {
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "INSERT INTO admin (nama, password) VALUES ('$nama', '$password')";
+
+            if (mysqli_query($koneksi, $sql)) {
+                $alert = '<div class="alert alert-success alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                Registrasi berhasil!
+                            </div>
+                        </div>';
+                header("refresh:2;url=login.php");
+            } else {
+                $alert = '<div class="alert alert-danger alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                                Registrasi gagal!
+                            </div>
+                        </div>';
+            }
         }
     }
 }
@@ -50,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Register &mdash; Stisla</title>
+  <title>Register Admin</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="assets/modules/bootstrap/css/bootstrap.min.css">
@@ -75,33 +86,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="card card-primary">
-              <div class="card-header"><h4>Registrasi</h4></div>
+              <div class="card-header"><h4>Register Admin</h4></div>
 
               <div class="card-body">
                 <?php if(isset($alert)) echo $alert; ?>
                 <form method="POST">
                   <div class="row">
                     <div class="form-group col-12">
-                      <label for="nama">Nama Lengkap</label>
+                      <label for="nama">Nama</label>
                       <input id="nama" type="text" class="form-control" name="nama" required autofocus>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="jurusan">Jurusan</label>
-                    <select name="jurusan" class="form-control selectric" required>
-                      <option value="">Pilih Jurusan</option>
-                      <option value="Teknik Informatika">Teknik Informatika</option>
-                      <option value="teknik sipil">teknik sipil</option>
-                      <option value="pwk">Pwk</option>
-                      <option value="sistem informasi">sistem informasi</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" type="email" class="form-control" name="email" required>
-                    <div class="invalid-feedback">
                     </div>
                   </div>
 
@@ -112,23 +105,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                   </div>
 
+                  <div class="row">
+                    <div class="form-group col-12">
+                      <label for="password2" class="d-block">Konfirmasi Password</label>
+                      <input id="password2" type="password" class="form-control" name="password2" required>
+                    </div>
+                  </div>
+
                   <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                      <input type="checkbox" name="agree" class="custom-control-input" id="agree" required>
+                      <input type="checkbox" name="agree" class="custom-control-input" id="agree">
                       <label class="custom-control-label" for="agree">Saya setuju dengan syarat dan ketentuan</label>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-lg btn-block">
-                      Registasi
+                      Register
                     </button>
                   </div>
                 </form>
               </div>
             </div>
             <div class="mt-5 text-muted text-center">
-            Sudah punya akun? <a href="login.php">Login</a>
+              Sudah punya akun? <a href="login.php">Login</a>
             </div>
             <div class="simple-footer">
               Copyright &copy; Kelompok 6
